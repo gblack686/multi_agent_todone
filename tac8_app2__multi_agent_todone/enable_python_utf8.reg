@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+
+; This registry file sets PYTHONUTF8=1 as a system-wide environment variable
+; This forces all Python processes to use UTF-8 encoding by default
+; 
+; To apply:
+; 1. Double-click this file
+; 2. Click "Yes" when prompted
+; 3. Restart any open terminals/PowerShell windows
+; 4. No system restart required!
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment]
+"PYTHONUTF8"="1"
+
