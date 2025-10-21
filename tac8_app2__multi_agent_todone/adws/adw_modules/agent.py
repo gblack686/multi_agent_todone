@@ -78,7 +78,8 @@ def get_safe_subprocess_env() -> Dict[str, str]:
     """
     safe_env_vars = {
         # Anthropic Configuration (required)
-        "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
+        # NOTE: Commented out to let Claude use cached credentials
+        # "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
         
         # Claude Code Configuration
         "CLAUDE_CODE_PATH": os.getenv("CLAUDE_CODE_PATH", "claude"),
@@ -94,6 +95,15 @@ def get_safe_subprocess_env() -> Dict[str, str]:
         "TERM": os.getenv("TERM"),
         "LANG": os.getenv("LANG"),
         "LC_ALL": os.getenv("LC_ALL"),
+        
+        # Windows-specific environment variables (critical for Claude Code)
+        "USERPROFILE": os.getenv("USERPROFILE"),  # User home directory on Windows
+        "LOCALAPPDATA": os.getenv("LOCALAPPDATA"),  # For cache/credentials
+        "APPDATA": os.getenv("APPDATA"),  # For application data
+        "TEMP": os.getenv("TEMP"),  # Temp directory
+        "TMP": os.getenv("TMP"),  # Alternative temp directory
+        "SystemRoot": os.getenv("SystemRoot"),  # Windows system root
+        "COMPUTERNAME": os.getenv("COMPUTERNAME"),  # Computer name
         
         # Python-specific variables that subprocesses might need
         "PYTHONPATH": os.getenv("PYTHONPATH"),
@@ -421,13 +431,17 @@ def prompt_claude_code(request: AgentPromptRequest) -> AgentPromptResponse:
         # Open output file for streaming
         with open(request.output_file, "w") as output_f:
             # Execute Claude Code and stream output to file
+            # On Windows, .cmd files need shell=True to execute properly
             result = subprocess.run(
                 cmd,
+                stdin=subprocess.DEVNULL,  # Don't wait for stdin
                 stdout=output_f,  # Stream directly to file
                 stderr=subprocess.PIPE,
                 text=True,
                 env=env,
                 cwd=request.working_dir,  # Use working_dir if provided
+                timeout=300,  # 5 minute timeout
+                shell=True,  # Required for .cmd files on Windows
             )
 
         if result.returncode == 0:

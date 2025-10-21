@@ -1,5 +1,7 @@
 # AI Developer Workflows (ADWs)
 
+> **Windows Users:** See [`WINDOWS_SETUP.md`](../WINDOWS_SETUP.md) for platform-specific configuration and troubleshooting.
+
 ## Overview
 
 The `adws/` directory contains the **AI Developer Workflows** - the highest level of abstraction in the agentic layer. These are executable Python scripts that orchestrate Claude Code agents to perform complex development tasks on your application layer (`apps/*`).
