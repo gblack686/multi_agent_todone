@@ -1,0 +1,33 @@
+# Environment and secrets
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.so
+.venv/
+venv/
+
+# Claude Code generated files
+.claude/debug/
+.claude/projects/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
+agents/
+
+# Logs
+*.log
+.npm/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tar.gz
+.cache/
